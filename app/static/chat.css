@@ -1,0 +1,23 @@
+.chat {
+    text-align: center;
+
+}
+
+p{
+    text-align: left;
+    color:white
+}
+
+.main_chat {
+    background-image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZ6a8rnovP1K5dbUpDWpMzk6gLbVwhPgPeQ-W_Wn2Q&s';
+}
+
+.navbar {
+    margin-bottom: 0vh;
+}
+
+.main-chat {
+    padding-top: 2vh;
+    background-color: lightblue;
+    color:black
+}

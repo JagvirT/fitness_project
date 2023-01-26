@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css')}}">
+    <title>Document</title>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark margin_navbar">
+    <a class="navbar-brand" href="/">Muscle Brain</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        {%if current_user.is_authenticated%}
+        <li class="nav-item active">
+          <a class="nav-link" href="/home">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="/search">Search Exercises <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="/search_food">Search Foods<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="/posts">My Exercises <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="/chat">Live Chat Forum <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="/more_info"> More Info <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="/logout">Logout <span class="sr-only">(current)</span></a>
+        </li>
+
+        <li class="nav-item active">
+            <a class="nav-link" href="/signup"> Hello, {{current_user.username}} <span class="sr-only">(current)</span></a>
+        </li>
+        {%else%}
+        <li class="nav-item active">
+            <a class="nav-link" href="/login">Login <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="/signup">Sign Up <span class="sr-only">(current)</span></a>
+        </li>
+        {%endif%}
+      </ul>
+      <!-- <form class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form> -->
+    </div>
+  </nav>
+    <div class="main-chat" style="background-color:light">
+      <link rel="stylesheet" href="{{ url_for('static', filename='chat.css')}}">
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+        integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+        crossorigin="anonymous"></script>
+
+
+        <!-- new add -->
+
+        <section style="background-color: lightblue; margin-left:2vh" class="main_chat">
+        <div class="chat">
+            <input placeholder="Message" id ="message" />
+            </form>
+        </div>
+        </section>
+
+        <script>
+            const socket = io();
+
+            let messageBox = document.querySelector(".chat");
+
+            socket.on("connect", () => {
+                    let p = document.createElement("p")
+                    messageBox.appendChild(p)
+                })
+
+                let message = document.getElementById("message")
+                message.addEventListener("keypress", (event) => {
+                    if (event.which === 13) {
+                        socket.emit("message", message.value)
+                        message.value = ""
+                    }         
+                })
+
+                socket.on('message', (message) => {
+                    let messageElement = document.createElement("p")
+                    messageElement.innerText = message
+                    messageBox.appendChild(messageElement)
+                })
+        </script>
+    </div>
+  <div class=".container-fluid fixed-bottom">
+
+    <footer class="bg-dark text-center text-lg-start text-white">
+      <div class="container p-4">
+        <div class="row mt-4">
+          <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+            <h5 class="text-uppercase">Products</h5>
+
+            <ul class="list-unstyled mb-0">
+              <li>
+                <a href="/search" class="text-white"><i class="fas fa-book fa-fw fa-sm me-2"></i>Search Exercises</a>
+              </li>
+              <li>
+                <a href="/search_foods" class="text-white"><i class="fas fa-book fa-fw fa-sm me-2"></i>Search Foods</a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+            <h5 class="text-uppercase">Eat Better</h5>
+
+            <ul class="list-unstyled">
+              <li>
+                <a href="#!" class="text-white"><i class="fas fa-shipping-fast fa-fw fa-sm me-2"></i>Aviod Processed Foods</a>
+              </li>
+              <li>
+                <a href="#!" class="text-white"><i class="fas fa-backspace fa-fw fa-sm me-2"></i>Stick to Clean foods</a>
+              </li>
+              <li>
+                <a href="#!" class="text-white"><i class="far fa-file-alt fa-fw fa-sm me-2"></i>Vitamins</a>
+              </li>
+              <li>
+                <a href="#!" class="text-white"><i class="far fa-file-alt fa-fw fa-sm me-2"></i>Nutrious Food</a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+            <h5 class="text-uppercase">Contact Us</h5>
+
+            <ul class="list-unstyled">
+              <li>
+                <a href="#!" class="text-white">Muscle Brain</a>
+              </li>
+              <li>
+                <a href="#!" class="text-white">123 Street</a>
+              </li>
+              <li>
+                <a href="#!" class="text-white">05765 NY</a>
+              </li>
+              <li>
+                <a href="#!" class="text-white"><i class="fas fa-briefcase fa-fw fa-sm me-2"></i>tamberx4@yahoo.com</a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+            <h5 class="text-uppercase">Write to us</h5>
+
+            <ul class="list-unstyled">
+              <li>
+                <a href="#!" class="text-white"><i class="fas fa-at fa-fw fa-sm me-2"></i>Help in feedback</a>
+              </li>
+              <li>
+                <a href="#!" class="text-white"><i class="fas fa-shipping-fast fa-fw fa-sm me-2"></i>What Info You Want To Know</a>
+              </li>
+              <li>
+                <a href="#!" class="text-white"><i class="fas fa-envelope fa-fw fa-sm me-2"></i>Join the team!</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
+        © 2023 Copyright:
+        <a class="text-white" href="https://mdbootstrap.com/">Muscle Brain</a>
+      </div>
+    </footer>
+
+  </div>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>   
+</body>
+</html>

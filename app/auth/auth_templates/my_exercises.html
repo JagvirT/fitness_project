@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% for post in posts %}
+{% if current_user.id == post.user_id %}
+<div class="card" style="width:400px; margin: 4.7vh">
+    <div class="card-body">
+      <h4 class="card-title">Name: {{post.name.title()}}</h4>
+      <img class="card-img-top" src= {{post.gifUrl}} alt="Card image" style="width:100%">
+      <video src="https://www.youtube.com/playlist?list=PL5qo1Sl2GW3cMiepxpnY3vjo7MPM-ejBh"></video>
+      <p class="card-text">Targets: {{post.bodyPart.title()}}, {{post.target.title()}} </p>
+      <p class="card-text">Equipment Needed: {{post.equipment.title()}}</p>
+      <a type="button" class="btn btn-danger" href="/posts/delete/{{post.id}}">Delete from my exercises</a>
+    </div>
+</div>
+
+{% endif %}
+{% endfor%}
+{% endblock%}

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='search.css')}}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css')}}">
+    <title>Document</title>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark margin_navbar">
+    <a class="navbar-brand" href="/">Muscle Brain</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        {%if current_user.is_authenticated%}
+        <li class="nav-item active">
+          <a class="nav-link" href="/home">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="/search">Search Exercises <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="/search_food">Search Foods<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="/posts">My Exercises <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="/chat">Live Chat Forum <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="/more_info"> More Info <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="/logout">Logout <span class="sr-only">(current)</span></a>
+        </li>
+
+        <li class="nav-item active">
+            <a class="nav-link" href="/signup"> Hello, {{current_user.username}} <span class="sr-only">(current)</span></a>
+        </li>
+        {%else%}
+        <li class="nav-item active">
+            <a class="nav-link" href="/login">Login <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="/signup">Sign Up <span class="sr-only">(current)</span></a>
+        </li>
+        {%endif%}
+      </ul>
+      <!-- <form class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form> -->
+    </div>
+  </nav>
+  {% with messages = get_flashed_messages() %}
+  {%if messages%}
+  <ul class=flashes>
+      {% for message in messages %}
+          <div class="alert alert-success alert-dismissible fade show" role="alert">
+              <strong>{{message}}</strong> 
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+      {% endfor %}
+  <ul>
+  {% endif %}
+{% endwith  %}
+<h2 style="padding-left:5vh; text-align:center"> Enter Exercise to get Data:</h2>
+    <form class="" style="padding-left:5vh" method="POST">
+        <div class="col">
+          {{form.exercise(class="form-control mb-2 mr-sm-2", placeholder="Enter Workout")}}
+        </div>
+        <div class="text-center">
+          {{form.submit(class="btn btn-success mb-2", value= 'Enter')}}
+        </div>
+        {{form.hidden_tag()}}
+      </form>
+      {% for e in exercises %}
+        <div class="card" style="width:400px; margin:30px">
+          <div class="card-body">
+            <h4 class="card-title">Name: {{e.name.title()}}</h4>
+            <img class="card-img-top" src= {{e.gifUrl}} alt="Card image" style="width:100%">
+            <p class="card-text"><b>Targets</b> {{e.bodyPart.title()}}, {{e.target.title()}} </p>
+            <p class="card-text"><b>Equipment Needed:</b> {{e.equipment.title()}}</p>
+            <a type="button" class="btn btn-primary" href="{{url_for('auth.test_add', exercise_name=e.name)}}">Add Exercise</a>
+          </div>
+        </div>
+      {%endfor%}
+
+      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>   
+
+</body>
+</html>
